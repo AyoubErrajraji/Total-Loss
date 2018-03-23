@@ -1,0 +1,81 @@
+//name file = DbConnection.cs
++using System;
++using System.Collections.Generic;
++using System.Linq;
++using System.Web;
++using System.Data.SqlClient;
++using System.Data;
++
++namespace WebApplication1
++{
++    public class DbConnection
++    {
++        SqlConnection myUpdateConnection;
++        public void DoConnection()
++        {          
++            myUpdateConnection = new SqlConnection("Server=tcp:totalloss2server.database.windows.net,1433;Initial Catalog=totalloss2;Persist Security Info=False;User ID=ayoub;Password=elbachirErr1972;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;");
++            myUpdateConnection.Open();
++        }
++
++        public DataTable ExecuteQuery(string sqlStatement)
++        {
++            try
++            {
++                DoConnection();
++                SqlDataAdapter da = new SqlDataAdapter(sqlStatement, myUpdateConnection);
++                DataTable tbl = new DataTable();
++
++                da.Fill(tbl);
++                return tbl;
++
++            }
++            catch (Exception ex)
++            {               
++                return null;
++            }
++        }
++    }
++    
++}
++
++
++
++
++////////////////////////////////////////////////////////////////////////////////////////////////////////////
++
++using System;
++using System.Collections.Generic;
++using System.Linq;
++using System.Web;
++using System.Web.UI;
++using System.Web.UI.WebControls;
++using System.Data;
++
++namespace WebApplication1
++{
++    public partial class nationaliteiten : System.Web.UI.Page
++    {
++        protected void Page_Load(object sender, EventArgs e)
++        {
++            DataTable dt = new DataTable();
++
++            string sqlst = "SELECT TOP (1000) [_PTJ_ID_] " +
++                             ",[_VKL_NUMMER_] ,[_NUMMER_],[_DOORRIJDER_],[_OTE_ID_] " +
++                             ",[_OTE_AN_] ,[_NTT_CODE_V_] ,[_VTGVERZ_] ,[_SCHADE_] ,[_GETRAANH_]" +
++                             ",[_GEVSTOF_] ,[_VTGVERL_] ,[_ANTL_PAS_] ,[_GEBDAT_] ,[_GEBJAAR_]" +
++                             ",[_LEEFTIJD_] ,[_LKE_ID_] ,[_NTT_CODE_B_] ,[_GESLACHT_] ,[_BLAASTEST_]" +
++                             ",[_ART8_] ,[_MEDICGEBR_] ,[_RIJBEWGEL_] ,[_RIJBEWCAT_] ,[_RIJBEWBEG_]" +
++                             ",[_BROMFCERT_] ,[_UITGPOS1_] ,[_UITGPOS2_] ,[_UITGPOS_AN_] ,[_VOORGBEW_]" +
++                             ",[_AGT_TYPE_] ,[_AGT_ID_1_] ,[_AGT_ID_2_] ,[_BWG_ID_1_] ,[_BWG_ID_2_] ,[_BWG_AN_]" +
++                             ",[_TDT_ID_1_] ,[_TDT_ID_2_] ,[_TDT_ID_3_] ,[_TDT_AN_] FROM[dbo].[partijen]";
++
++            DbConnection MyConnection = new DbConnection();
++            dt = MyConnection.ExecuteQuery(sqlst);
++
++            GridView1.DataSource = dt;
++            GridView1.DataBind();
++            GridView1.AutoGenerateColumns = true;
++
++        }
++    }
++}
